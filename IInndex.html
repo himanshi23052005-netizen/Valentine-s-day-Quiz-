@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #ffcccc, #ff9999);
+            margin: 0;
+            padding: 20px;
+            overflow: hidden; /* For floating hearts */
+        }
+        /* Small floating hearts in background */
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff6666;
+            animation: float 10s linear infinite;
+            opacity: 0.7;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+        .question-container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px; /* Bigger padding */
+            border-radius: 15px;
+            margin: 30px auto;
+            max-width: 800px; /* Wider */
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            font-size: 22px; /* Bigger text */
+        }
+        .question1 { background: linear-gradient(to bottom, #ffcccc, #ff6666); }
+        .question2 { background: linear-gradient(to bottom, #ccffcc, #66ff66); }
+        .question3 { background: linear-gradient(to bottom, #ccccff, #6666ff); }
+        .question4 { background: linear-gradient(to bottom, #ffffcc, #ffff66); }
+        .options {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        .option {
+            padding: 15px 30px; /* Bigger buttons */
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+        .question1 .option { background: #ff9999; }
+        .question1 .option:hover { background: #ff6666; }
+        .question2 .option { background: #99ff99; }
+        .question2 .option:hover { background: #66ff66; }
+        .question3 .option { background: #9999ff; }
+        .question3 .option:hover { background: #6666ff; }
+        .question4 .option { background: #ffff99; }
+        .question4 .option:hover { background: #ffff66; }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 50px; /* Bigger popup */
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            z-index: 1000;
+            font-size: 26px; /* Bigger text */
+        }
+        .fireworks {
+            position: relative;
+            overflow: hidden;
+        }
+        .firework {
+            position: absolute;
+            width: 20px; /* Bigger */
+            height: 20px; /* Bigger */
+            background: red;
+            border-radius: 50%;
+            animation: explode 0.5s ease-out infinite; /* Faster */
+        }
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(15); opacity: 0; } /* Bigger explosion */
+        }
+        .hearts {
+            font-size: 60px; /* Bigger */
+        }
+        .laughing {
+            font-size: 40px; /* Bigger */
+        }
+        /* Big heart popup for correct answers */
+        .big-heart {
+            display: none;
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 120px; /* Even bigger */
+            z-index: 2000;
+            animation: heartPopup 2s ease-out;
+        }
+        @keyframes heartPopup {
+            0% { top: -100px; opacity: 1; }
+            50% { top: 50%; opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating small hearts -->
+    <div class="floating-heart" style="left: 10%; animation-delay: 0s;">❤️</div>
+    <div class="floating-heart" style="left: 20%; animation-delay: 2s;">💖</div>
+    <div class="floating-heart" style="left: 30%; animation-delay: 4s;">❤️</div>
+    <div class="floating-heart" style="left: 40%; animation-delay: 6s;">💖</div>
+    <div class="floating-heart" style="left: 50%; animation-delay: 8s;">❤️</div>
+    <div class="floating-heart" style="left: 60%; animation-delay: 10s;">💖</div>
+    <div class="floating-heart" style="left: 70%; animation-delay: 12s;">❤️</div>
+    <div class="floating-heart" style="left: 80%; animation-delay: 14s;">💖</div>
+    <div class="floating-heart" style="left: 90%; animation-delay: 16s;">❤️</div>
+
+    <div id="quiz-container">
+        <div class="question-container question1" id="q1">
+            <h2>When did we first meet?</h2>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(1, '13 Feb')">13 Feb</button>
+                <button class="option" onclick="checkAnswer(1, '8 July')">8 July</button>
+                <button class="option" onclick="checkAnswer(1, '18 March')">18 March</button>
+            </div>
+        </div>
+        <div class="question-container question2" id="q2" style="display: none;">
+            <h2>What did you buy me first?</h2>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(2, 'Teddy')">Teddy</button>
+                <button class="option" onclick="checkAnswer(2, 'Chocolate')">Chocolate</button>
+                <button class="option" onclick="checkAnswer(2, 'Cake')">Cake</button>
+            </div>
+        </div>
+        <div class="question-container question3" id="q3" style="display: none;">
+            <h2>What do I love the most?</h2>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(3, 'Gold')">Gold</button>
+                <button class="option" onclick="checkAnswer(3, 'Chocolate')">Chocolate</button>
+                <button class="option" onclick="checkAnswer(3, 'Kurkure')">Kurkure</button>
+            </div>
+        </div>
+        <div class="question-container question4" id="q4" style="display: none;">
+            <h2>Will you be my Valentine?</h2>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(4, 'Yes')">Yes</button>
+                <button class="option" onclick="checkAnswer(4, 'No')">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Big heart popup -->
+    <div id="big-heart" class="big-heart">❤️</div>
+
+    <div id="popup" class="popup">
+        <p id="popup-message"></p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+
+    <div id="final-popup" class="popup">
+        <div class="fireworks" id="fireworks-container">
+            <div class="hearts">❤️❤️❤️</div>
+            <p>From now you are my Valentine!</p>
+            <!-- More bigger fireworks -->
+            <div class="firework" style="top: 10%; left: 10%;"></div>
+            <div class="firework" style="top: 20%; left: 80%;"></div>
+            <div class="firework" style="top: 40%; left: 20%;"></div>
+            <div class="firework" style="top: 50%; left: 70%;"></div>
+            <div class="firework" style="top: 70%; left: 30%;"></div>
+            <div class="firework" style="top: 80%; left: 60%;"></div>
+        </div>
+        <button onclick="endQuiz()">Finish</button>
+    </div>
+
+    <div id="end-popup" class="popup">
+        <h2>Buy me Kurkure!</h2>
+        <div class="laughing">😂😂😂😂😂</div>
+        <button onclick="closeEndPopup()">OK</button>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const answers = {
+            1: '18 March',
+            2: 'Teddy',
+            3: 'Kurkure',
+            4: 'Yes'
+        };
+
+        function checkAnswer(question, selected) {
+            if (selected === answers[question]) {
+                // Show big heart popup
+                const heart = document.getElementById('big-heart');
+                heart.style.display = 'block';
+                setTimeout(() => {
+                    heart.style.display = 'none';
+                }, 2000);
+                if (question === 4) {
+                    setTimeout(() => {
+                        document.getElementById('final-popup').style.display = 'block';
+                    }, 1000);
+                } else {
+                    nextQuestion();
+                }
+            } else {
+                showPopup('You better see me after the quiz!');
+            }
+        }
+
+        function showPopup(message) {
+            document.getElementById('popup-message').textContent = message;
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function nextQuestion() {
+            document.getElementById('q' + currentQuestion).style.display = 'none';
+            currentQuestion++;
+            if (currentQuestion <= 4) {
+                document.getElementById('q' + currentQuestion).style.display = 'block';
+            }
+        }
+
+        function endQuiz() {
+            document.getElementById('final-popup').style.display = 'none';
+            document.getElementById('end-popup').style.display = 'block';
+        }
+
+        function closeEndPopup() {
+            document.getElementById('end-popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
